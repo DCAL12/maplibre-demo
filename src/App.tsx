@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
+import Map, {Marker} from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Map
+      initialViewState={{
+        latitude: 37.8,
+        longitude: -122.4,
+        zoom: 14
+      }}
+      mapLib={maplibregl}
+      style={{width: 800, height: 600}}
+      mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+    >
+      <Marker longitude={-122.4} latitude={37.8} color="red" />
+    </Map>
   );
 }
 
