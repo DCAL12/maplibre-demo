@@ -6,8 +6,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import './App.css';
 
 const GET_LOCATIONS = gql`
-  query MyQuery {
-    vehicles(codespaceId:"SKY") {
+  query MyQuery($codespaceId: String!) {
+    vehicles(codespaceId: $codespaceId) {
       line {lineRef}
       lastUpdated
       location {
@@ -24,14 +24,17 @@ interface Vehicle {
   lastUpdated: string;
 }
 
-function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_LOCATIONS, {
+interface DisplayLocationsParams {
+  codespaceId: string
+}
+
+function DisplayLocations({ codespaceId }: DisplayLocationsParams) {
+  const { loading, error, data, refetch } = useQuery(GET_LOCATIONS, {
+    variables: { codespaceId },
     pollInterval: 1000,
   });
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(error)</p>;
-
-  console.log("poll");
+  if (error) return <p>Error: (error)</p>;
 
   const layerStyle = {
     id: 'point',
@@ -61,20 +64,25 @@ function DisplayLocations() {
   };
 
   return (
-    <Map
-      initialViewState={{
-        latitude: 60.5,
-        longitude: 5.8,
-        zoom: 7
-      }}
-      mapLib={maplibregl}
-      style={{ width: 800, height: 600 }}
-      mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-    >
-      <Source id="my-data" type="geojson" data={vehiclesGeojson}>
-        <Layer {...layerStyle} />
-      </Source>
-    </Map>
+    <div>
+      <Map
+        initialViewState={{
+          latitude: 60.5,
+          longitude: 5.8,
+          zoom: 7
+        }}
+        mapLib={maplibregl}
+        style={{ width: 800, height: 600 }}
+        mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+      >
+        <Source id="my-data" type="geojson" data={vehiclesGeojson}>
+          <Layer {...layerStyle} />
+        </Source>
+      </Map>
+      <button onClick={() => refetch({ codespaceId: 'SKY' })}>
+        Refetch
+      </button>
+    </div>
   );
 }
 
@@ -82,7 +90,7 @@ function App() {
   const [viewport, setViewport] = React.useState();
   return (
     <div>
-      <DisplayLocations />
+      <DisplayLocations codespaceId='SKY'/>
     </div>
   );
 }

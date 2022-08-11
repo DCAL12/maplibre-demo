@@ -6,8 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  // uri: 'https://teaching-quetzal-12.hasura.app/v1/graphql',
-  uri: 'https://api.entur.io/realtime/v1/vehicles/graphql',
+  uri: 'https://teaching-quetzal-12.hasura.app/v1/graphql',
+  // uri: 'https://api.entur.io/realtime/v1/vehicles/graphql',
   cache: new InMemoryCache(),
 });
 
