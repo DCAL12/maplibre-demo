@@ -25,9 +25,13 @@ interface Vehicle {
 }
 
 function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
+  const { loading, error, data } = useQuery(GET_LOCATIONS, {
+    pollInterval: 1000,
+  });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(error)</p>;
+
+  console.log("poll");
 
   const layerStyle = {
     id: 'point',
